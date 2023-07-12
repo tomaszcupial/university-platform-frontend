@@ -113,7 +113,7 @@ export default function Users() {
                                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
                                         id
                                     </th>
-                                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
                                         Imię i nazwisko
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -130,8 +130,8 @@ export default function Users() {
                             <tbody className="divide-y divide-gray-200 bg-white">
                                 {people.map((person) => (
                                     <tr key={person.username}>
-                                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.id}</td>
-                                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 sm:pl-0">{person.id}</td>
+                                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm">
                                             <div className="flex items-center">
                                                 <div className="h-11 w-11 flex-shrink-0">
                                                     < PersonImage firstName={person.first_name} lastName={person.last_name} className="h-11 w-11 text-lg font-bold" />
