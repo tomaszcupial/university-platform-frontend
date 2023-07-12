@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { Logo } from "@/components/Logo";
+import PersonImage from "@/components/PersonImage"
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
@@ -155,9 +156,9 @@ export default function Example({ children }) {
                                         className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                                     > */}
                                     <div className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900">
-                                        <div className="h-8 w-8 rounded-full bg-lime-200 flex justify-center items-center text-lime-700">NS</div>
+                                        <PersonImage firstName="Sophie" lastName="Davis" />
                                         <span className="sr-only">Your profile</span>
-                                        <span aria-hidden="true">Name Surname</span>
+                                        <span aria-hidden="true">Sophie Davis</span>
                                     </div>
                                     {/* </a> */}
                                 </li>

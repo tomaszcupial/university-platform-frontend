@@ -32,7 +32,7 @@ const people = [
         last_name: 'Miller',
         username: 'sophiamiller',
         role: 'Student',
-        deleted: false,
+        deleted: true,
     },
     {
         id: '5',
@@ -64,7 +64,7 @@ const people = [
         last_name: 'Davis',
         username: 'sophiedavis',
         role: 'Administrator',
-        deleted: true,
+        deleted: false,
     },
     {
         id: '9',
