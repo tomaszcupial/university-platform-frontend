@@ -19,7 +19,7 @@ import PersonImage from "@/components/PersonImage"
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Użytkownicy', href: '/dashboard/users', icon: UsersIcon },
-    { name: 'Kusry', href: '/dashboard/courses', icon: FolderIcon },
+    { name: 'Kursy', href: '/dashboard/courses', icon: FolderIcon },
 ]
 
 function classNames(...classes) {
