@@ -14,7 +14,7 @@ export default function SignIn() {
       username: username.current,
       password: password.current,
       redirect: true,
-      callbackUrl: "/dashboard",
+      callbackUrl: "",
     });
   };
 

@@ -1,5 +1,10 @@
-import PersonImage from "@/src/components/PersonImage";
+import PersonImage from "@/app/components/PersonImage";
 import clsx from "clsx";
+
+import { getServerSession } from "next-auth/next";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+
+import { redirect } from "next/navigation";
 
 const people = [
   {
@@ -85,7 +90,61 @@ const people = [
   // More people...
 ];
 
-export default function Users() {
+async function getSession() {
+  const session = await getServerSession(options);
+  return session;
+}
+
+async function getUsersList(token) {
+  const res = await fetch(`http://127.0.0.1:5003/api/list-users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  });
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  // Recommendation: handle errors
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data", res);
+  }
+  return res.json();
+}
+
+export default async function Users() {
+  const session = await getSession();
+
+  console.log(session.user.token);
+  async function deleteUser(formData) {
+    "use server";
+    const res = await fetch(`http://127.0.0.1:5003/api/delete-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: session.user.token,
+      },
+      body: JSON.stringify({
+        id_user: formData.get("id"),
+      }),
+    });
+    // The return value is *not* serialized
+    // You can return Date, Map, Set, etc.
+    // Recommendation: handle errors
+    if (!res.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch data", res);
+    } else {
+      return redirect("/admin/users");
+    }
+  }
+
+  const { success, users } = await getUsersList(session.user.token);
+  // const data = await getUsersList(session.user.token);
+  console.log(users);
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -99,12 +158,13 @@ export default function Users() {
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
+          <a
             type="button"
+            href="/admin/users/add"
             className="block rounded-md bg-lime-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600"
           >
             Dodaj użytkownika
-          </button>
+          </a>
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -138,12 +198,12 @@ export default function Users() {
                     Rola
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Edytuj</span>
+                    <span className="sr-only">Usuń</span>
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {people.map((person) => (
+                {users?.map((person) => (
                   <tr key={person.username}>
                     <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 sm:pl-0">
                       {person.id}
@@ -154,7 +214,7 @@ export default function Users() {
                           <PersonImage
                             firstName={person.first_name}
                             lastName={person.last_name}
-                            className="h-11 w-11 text-lg font-bold"
+                            className="h-11 w-11 text-lg"
                           />
                         </div>
                         <div className="ml-4">
@@ -184,9 +244,15 @@ export default function Users() {
                       {person.role}
                     </td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" className="text-lime-600 hover:text-lime-900">
-                        Edytuj<span className="sr-only">, {person.name}</span>
-                      </a>
+                      <form action={deleteUser}>
+                        <input type="hidden" name="id" value={person.id} />
+                        <button
+                          className="text-red-600 hover:text-red-900"
+                          type="submit"
+                        >
+                          Usuń<span className="sr-only">, {person.name}</span>
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 ))}
